@@ -1,0 +1,171 @@
+{
+  "entities": {
+    "JarvisCloudMission": {
+      "title": "JarvisCloudMission",
+      "description": "Stores a voice command mission, multi-AI council synthesis, and executed phone action in Firestore.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "UID of the authenticated Google user who owns this mission."
+        },
+        "prompt": {
+          "type": "string",
+          "description": "The Uzbek voice or text command issued by the user."
+        },
+        "mode": {
+          "type": "string",
+          "enum": ["VOICE_COUNCIL", "AGENT_DEBATE", "TACTICAL_PROTOCOL"],
+          "description": "Execution mode of the AI Council."
+        },
+        "finalSpeech": {
+          "type": "string",
+          "description": "Final synthesized Uzbek voice response from JARVIS-CORE."
+        },
+        "architectReport": {
+          "type": "string",
+          "description": "Technical report from NEXUS-CODE."
+        },
+        "strategistPlan": {
+          "type": "string",
+          "description": "Execution plan from STRAT-MIND."
+        },
+        "sentinelSecurityNote": {
+          "type": "string",
+          "description": "Security analysis from AEGIS-GUARD."
+        },
+        "creativeSpark": {
+          "type": "string",
+          "description": "Innovative idea from VISION-NOVA."
+        },
+        "executedDeviceAction": {
+          "type": "string",
+          "description": "Optional summary of the hardware/system action executed on the phone."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the mission was created (FieldValue.serverTimestamp())."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the mission was last updated (FieldValue.serverTimestamp())."
+        }
+      },
+      "required": [
+        "userId",
+        "prompt",
+        "mode",
+        "finalSpeech",
+        "architectReport",
+        "strategistPlan",
+        "sentinelSecurityNote",
+        "creativeSpark",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "AutoCallReplyLog": {
+      "title": "AutoCallReplyLog",
+      "description": "Stores an incoming phone call screened and automatically answered by the Astrafolio AI Secretary.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "UID of the authenticated Google user."
+        },
+        "callerNumber": {
+          "type": "string",
+          "description": "Phone number or identifier of the incoming caller."
+        },
+        "callerLabel": {
+          "type": "string",
+          "description": "Display label or context of the caller."
+        },
+        "statusPreset": {
+          "type": "string",
+          "description": "Active user availability mode (e.g., Uchrashuvdaman, Rulda, Bandman)."
+        },
+        "aiGeneratedReply": {
+          "type": "string",
+          "description": "Uzbek automatic response spoken via TTS and prepared for SMS reply."
+        },
+        "autoAnswered": {
+          "type": "boolean",
+          "description": "Whether the AI secretary automatically screened and responded to the call."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the call was logged (FieldValue.serverTimestamp())."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the call log was last updated (FieldValue.serverTimestamp())."
+        }
+      },
+      "required": [
+        "userId",
+        "callerNumber",
+        "callerLabel",
+        "statusPreset",
+        "aiGeneratedReply",
+        "autoAnswered",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "VoiceNoteItem": {
+      "title": "VoiceNoteItem",
+      "description": "Stores a voice-dictated note or task created through Uzbek voice commands.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "UID of the authenticated Google user."
+        },
+        "title": {
+          "type": "string",
+          "description": "Short title of the voice note."
+        },
+        "content": {
+          "type": "string",
+          "description": "Full text content of the voice note."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the voice note was created (FieldValue.serverTimestamp())."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the voice note was updated (FieldValue.serverTimestamp())."
+        }
+      },
+      "required": [
+        "userId",
+        "title",
+        "content",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}/missions/{missionId}": {
+      "schema": { "$ref": "#/entities/JarvisCloudMission" },
+      "description": "User-scoped cloud archive of voice commands, AI Council reports, and phone control actions."
+    },
+    "/users/{userId}/call_logs/{callId}": {
+      "schema": { "$ref": "#/entities/AutoCallReplyLog" },
+      "description": "User-scoped log of incoming calls handled by the AI Auto-Responder Secretary."
+    },
+    "/users/{userId}/voice_notes/{noteId}": {
+      "schema": { "$ref": "#/entities/VoiceNoteItem" },
+      "description": "User-scoped voice notes dictated via hands-free commands."
+    }
+  }
+}

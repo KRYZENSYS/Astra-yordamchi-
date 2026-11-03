@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">Astrafolio</string>
+    <string name="hud_title">ASTRAFOLIO • 5-AI VOICE OS</string>
+    <string name="hud_subtitle">Ovozli Boshqaruv • 24/7 Orqa Fon • Avto-Kotib • Firebase</string>
+    <string name="tab_command">Ovoz</string>
+    <string name="tab_secretary">Avto-Kotib</string>
+    <string name="tab_vision">Vision</string>
+    <string name="tab_radar">Radar</string>
+    <string name="tab_blueprints">G\'oyalar</string>
+    <string name="voice_ready_prompt">Mikrofon tugmasini bosing yoki buyruq yozing</string>
+    <string name="voice_listening_active">Tinglanmoqda&#8230; Ovozli buyruq bering</string>
+    <string name="voice_speaking_active">JARVIS-CORE ovozli javob bermoqda&#8230;</string>
+    <string name="btn_voice_listen">Ovozli Buyruq Berish</string>
+    <string name="btn_voice_stop">Tinglashni To\'xtatish</string>
+    <string name="placeholder_command">Buyruq bering (masalan: Fonarikni yoq, Avto-kotibni yoq, Soat 07:30 ga budilnik qo\'y)&#8230;</string>
+    <string name="command_input_hint">Buyruq bering (masalan: Fonarikni yoq, Avto-kotibni yoq, Soat 07:30 ga budilnik qo\'y)&#8230;</string>
+    <string name="btn_send_command">Kengashga Yuborish</string>
+    <string name="send_command_btn">Kengashga Yuborish</string>
+    <string name="speak_response_btn">Ovozda Eshitish</string>
+    <string name="stop_speaking_btn">Ovozni To\'xtatish</string>
+    <string name="btn_generate_blueprint">Yangi Jarvis Arxitekturasini Yaratish</string>
+    <string name="generate_blueprint_btn">Yangi Jarvis Arxitekturasini Yaratish</string>
+    <string name="placeholder_blueprint_topic">Qanday Jarvis kerak? (masalan: Avtomobil uchun ovozli AI yordamchi)</string>
+    <string name="blueprint_topic_hint">Qanday Jarvis kerak? (masalan: Avtomobil uchun ovozli AI yordamchi)</string>
+    <string name="empty_memory_title">Xotira Arxivi Bo\'sh</string>
+    <string name="empty_memory_subtitle">Ovozli yoki matnli buyruq bering — 5 ta AI agent tahlili shu yerda saqlanadi.</string>
+    <string name="permission_mic_rationale">Ovoz bilan boshqarish uchun mikrofon ruxsati zarur. Matn orqali ham foydalanishingiz mumkin.</string>
+    <string name="mic_permission_rationale">Ovoz bilan boshqarish uchun mikrofon ruxsati zarur. Matn orqali ham foydalanishingiz mumkin.</string>
+</resources>

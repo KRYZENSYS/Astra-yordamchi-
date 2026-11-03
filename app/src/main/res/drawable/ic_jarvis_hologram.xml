@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+    <!-- Outer tactical octagon -->
+    <path
+        android:fillColor="#1A00E5FF"
+        android:strokeColor="#00E5FF"
+        android:strokeWidth="2"
+        android:pathData="M38,10 L82,10 L110,38 L110,82 L82,110 L38,110 L10,82 L10,38 Z" />
+    <!-- Inner hex circuit -->
+    <path
+        android:fillColor="#2638BDF8"
+        android:strokeColor="#38BDF8"
+        android:strokeWidth="2.5"
+        android:pathData="M60,22 L93,41 L93,79 L60,98 L27,79 L27,41 Z" />
+    <!-- Neural crosshairs -->
+    <path
+        android:strokeColor="#8000E5FF"
+        android:strokeWidth="1.5"
+        android:pathData="M60,10 L60,34 M60,86 L60,110 M10,60 L34,60 M86,60 L110,60" />
+    <!-- Central AI Core -->
+    <path
+        android:fillColor="#00E5FF"
+        android:pathData="M60,44 A16,16 0 1,1 59.99,44 Z" />
+    <path
+        android:fillColor="#E0F7FA"
+        android:pathData="M60,52 A8,8 0 1,1 59.99,52 Z" />
+</vector>

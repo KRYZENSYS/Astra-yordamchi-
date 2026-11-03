@@ -1,0 +1,159 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Pillar 0: Global default-deny safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Core Primitives
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidTimestamp(ts) {
+      return ts is timestamp && ts <= request.time;
+    }
+
+    // Validation Helper 1: JarvisCloudMission
+    function isValidMission(data, userId) {
+      return data.userId is string && data.userId == userId && data.userId == request.auth.uid &&
+             data.prompt is string && data.prompt.size() >= 1 && data.prompt.size() <= 2000 &&
+             data.mode is string && data.mode in ['VOICE_COUNCIL', 'AGENT_DEBATE', 'TACTICAL_PROTOCOL'] &&
+             data.finalSpeech is string && data.finalSpeech.size() >= 1 && data.finalSpeech.size() <= 6000 &&
+             data.architectReport is string && data.architectReport.size() >= 1 && data.architectReport.size() <= 4000 &&
+             data.strategistPlan is string && data.strategistPlan.size() >= 1 && data.strategistPlan.size() <= 4000 &&
+             data.sentinelSecurityNote is string && data.sentinelSecurityNote.size() >= 1 && data.sentinelSecurityNote.size() <= 4000 &&
+             data.creativeSpark is string && data.creativeSpark.size() >= 1 && data.creativeSpark.size() <= 4000 &&
+             (!('executedDeviceAction' in data) || data.executedDeviceAction == null || (data.executedDeviceAction is string && data.executedDeviceAction.size() <= 500)) &&
+             isValidTimestamp(data.createdAt) &&
+             isValidTimestamp(data.updatedAt);
+    }
+
+    // Validation Helper 2: AutoCallReplyLog
+    function isValidCallLog(data, userId) {
+      return data.userId is string && data.userId == userId && data.userId == request.auth.uid &&
+             data.callerNumber is string && data.callerNumber.size() >= 1 && data.callerNumber.size() <= 100 &&
+             data.callerLabel is string && data.callerLabel.size() >= 1 && data.callerLabel.size() <= 150 &&
+             data.statusPreset is string && data.statusPreset.size() >= 1 && data.statusPreset.size() <= 100 &&
+             data.aiGeneratedReply is string && data.aiGeneratedReply.size() >= 1 && data.aiGeneratedReply.size() <= 2000 &&
+             data.autoAnswered is bool &&
+             isValidTimestamp(data.createdAt) &&
+             isValidTimestamp(data.updatedAt);
+    }
+
+    // Validation Helper 3: VoiceNoteItem
+    function isValidVoiceNote(data, userId) {
+      return data.userId is string && data.userId == userId && data.userId == request.auth.uid &&
+             data.title is string && data.title.size() >= 1 && data.title.size() <= 300 &&
+             data.content is string && data.content.size() >= 1 && data.content.size() <= 4000 &&
+             isValidTimestamp(data.createdAt) &&
+             isValidTimestamp(data.updatedAt);
+    }
+
+    match /users/{userId} {
+      // 1. Cloud Missions Subcollection
+      match /missions/{missionId} {
+        allow get: if isOwner(userId) && isValidId(userId) && isValidId(missionId);
+        allow list: if isOwner(userId);
+
+        allow create: if isOwner(userId) &&
+                         isValidId(userId) &&
+                         isValidId(missionId) &&
+                         incoming().keys().hasAll([
+                           'userId', 'prompt', 'mode', 'finalSpeech',
+                           'architectReport', 'strategistPlan', 'sentinelSecurityNote',
+                           'creativeSpark', 'createdAt', 'updatedAt'
+                         ]) &&
+                         incoming().keys().hasOnly([
+                           'userId', 'prompt', 'mode', 'finalSpeech',
+                           'architectReport', 'strategistPlan', 'sentinelSecurityNote',
+                           'creativeSpark', 'executedDeviceAction', 'createdAt', 'updatedAt'
+                         ]) &&
+                         isValidMission(incoming(), userId);
+
+        allow update: if isOwner(userId) &&
+                         isValidId(userId) &&
+                         isValidId(missionId) &&
+                         isValidMission(incoming(), userId) &&
+                         incoming().userId == existing().userId &&
+                         incoming().createdAt == existing().createdAt &&
+                         incoming().diff(existing()).affectedKeys().hasOnly([
+                           'finalSpeech', 'executedDeviceAction', 'updatedAt'
+                         ]);
+
+        allow delete: if isOwner(userId) && isValidId(userId) && isValidId(missionId);
+      }
+
+      // 2. Auto Call Reply Logs Subcollection
+      match /call_logs/{callId} {
+        allow get: if isOwner(userId) && isValidId(userId) && isValidId(callId);
+        allow list: if isOwner(userId);
+
+        allow create: if isOwner(userId) &&
+                         isValidId(userId) &&
+                         isValidId(callId) &&
+                         incoming().keys().hasAll([
+                           'userId', 'callerNumber', 'callerLabel', 'statusPreset',
+                           'aiGeneratedReply', 'autoAnswered', 'createdAt', 'updatedAt'
+                         ]) &&
+                         incoming().keys().hasOnly([
+                           'userId', 'callerNumber', 'callerLabel', 'statusPreset',
+                           'aiGeneratedReply', 'autoAnswered', 'createdAt', 'updatedAt'
+                         ]) &&
+                         isValidCallLog(incoming(), userId);
+
+        allow update: if isOwner(userId) &&
+                         isValidId(userId) &&
+                         isValidId(callId) &&
+                         isValidCallLog(incoming(), userId) &&
+                         incoming().userId == existing().userId &&
+                         incoming().createdAt == existing().createdAt &&
+                         incoming().diff(existing()).affectedKeys().hasOnly([
+                           'aiGeneratedReply', 'autoAnswered', 'updatedAt'
+                         ]);
+
+        allow delete: if isOwner(userId) && isValidId(userId) && isValidId(callId);
+      }
+
+      // 3. Voice Notes Subcollection
+      match /voice_notes/{noteId} {
+        allow get: if isOwner(userId) && isValidId(userId) && isValidId(noteId);
+        allow list: if isOwner(userId);
+
+        allow create: if isOwner(userId) &&
+                         isValidId(userId) &&
+                         isValidId(noteId) &&
+                         incoming().keys().hasAll(['userId', 'title', 'content', 'createdAt', 'updatedAt']) &&
+                         incoming().keys().hasOnly(['userId', 'title', 'content', 'createdAt', 'updatedAt']) &&
+                         isValidVoiceNote(incoming(), userId);
+
+        allow update: if isOwner(userId) &&
+                         isValidId(userId) &&
+                         isValidId(noteId) &&
+                         isValidVoiceNote(incoming(), userId) &&
+                         incoming().userId == existing().userId &&
+                         incoming().createdAt == existing().createdAt &&
+                         incoming().diff(existing()).affectedKeys().hasOnly(['title', 'content', 'updatedAt']);
+
+        allow delete: if isOwner(userId) && isValidId(userId) && isValidId(noteId);
+      }
+    }
+  }
+}

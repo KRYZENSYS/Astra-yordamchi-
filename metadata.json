@@ -1,0 +1,6 @@
+{
+  "name": "Astrafolio",
+  "description": "Multi-agent voice-controlled JARVIS command center and AI architecture studio in Uzbek",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

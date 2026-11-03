@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Outer hexagonal AI core ring -->
+    <path
+        android:fillColor="#00E5FF"
+        android:pathData="M54,24 L80,39 L80,69 L54,84 L28,69 L28,39 Z M54,31 L34,42.5 L34,65.5 L54,77 L74,65.5 L74,42.5 Z" />
+    <!-- Inner tactical triangle / neural nexus -->
+    <path
+        android:fillColor="#38BDF8"
+        android:pathData="M54,36 L70,63 L38,63 Z M54,44 L45,59 L63,59 Z" />
+    <!-- Central glowing core node -->
+    <path
+        android:fillColor="#E0F7FA"
+        android:pathData="M54,48 A6,6 0 1,1 53.99,48 Z" />
+</vector>
