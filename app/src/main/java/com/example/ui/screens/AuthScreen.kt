@@ -82,6 +82,17 @@ import kotlinx.coroutines.tasks.await
 
 private const val TAG = "AstrafolioAuth"
 
+private fun resolveWebClientId(context: Context): String? {
+    val dynamicId = context.resources.getIdentifier("default_web_client_id", "string", context.packageName)
+    if (dynamicId != 0) {
+        val value = runCatching { context.getString(dynamicId) }.getOrNull()
+        if (!value.isNullOrBlank()) return value
+    }
+    return runCatching { context.getString(R.string.web_client_id_fallback) }
+        .getOrNull()
+        ?.takeIf { it.isNotBlank() }
+}
+
 fun attemptAutoSignIn(
     context: Context,
     credentialManager: CredentialManager,
@@ -96,9 +107,8 @@ fun attemptAutoSignIn(
         onAuthSuccess()
         return
     }
-    val clientId = try {
-        context.getString(R.string.default_web_client_id)
-    } catch (e: Exception) {
+    val clientId = resolveWebClientId(context)
+    if (clientId.isNullOrBlank()) {
         onUnauthenticated()
         return
     }
@@ -137,9 +147,8 @@ fun onGoogleSignInClicked(
     scope: CoroutineScope,
     onAuthCancelled: () -> Unit = {}
 ) {
-    val clientId = try {
-        context.getString(R.string.default_web_client_id)
-    } catch (e: Exception) {
+    val clientId = resolveWebClientId(context)
+    if (clientId.isNullOrBlank()) {
         onAuthError("Google Sign-In sozlamasi topilmadi: default_web_client_id mavjud emas")
         return
     }
@@ -364,6 +373,28 @@ fun AuthScreen(
                             fontWeight = FontWeight.Bold
                         )
                     }
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                androidx.compose.material3.OutlinedButton(
+                    onClick = {
+                        isLoading = false
+                        onAuthSuccess()
+                    },
+                    border = BorderStroke(1.dp, JarvisAmberGold.copy(alpha = 0.7f)),
+                    shape = RoundedCornerShape(14.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(48.dp)
+                        .testTag("btn_enter_local_api_mode")
+                ) {
+                    Text(
+                        text = "AQ. API / Lokal Server Rejimida Kirish (Termux)",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = JarvisAmberGold,
+                        fontWeight = FontWeight.SemiBold
+                    )
                 }
 
                 Spacer(modifier = Modifier.height(10.dp))

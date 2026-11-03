@@ -18,12 +18,24 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
 import java.util.UUID
 
+private fun resolveFirestoreDbId(context: Context): String {
+    val appContext = context.applicationContext
+    val resId = appContext.resources.getIdentifier(
+        "firestore_database_id",
+        "string",
+        appContext.packageName
+    )
+    return if (resId != 0) {
+        appContext.getString(resId)
+    } else {
+        "ai-studio-android-nexuscor-499343c5-860f-4fd8-83d6-826859fc6d08"
+    }
+}
+
 class AstrafolioCloudRepository(private val db: FirebaseFirestore) {
 
     constructor(context: Context) : this(
-        FirebaseFirestore.getInstance(
-            context.applicationContext.getString(R.string.firestore_database_id)
-        )
+        FirebaseFirestore.getInstance(resolveFirestoreDbId(context))
     )
 
     private val auth = Firebase.auth

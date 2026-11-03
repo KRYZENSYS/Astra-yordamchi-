@@ -26,4 +26,5 @@
     <string name="empty_memory_subtitle">Ovozli yoki matnli buyruq bering — 5 ta AI agent tahlili shu yerda saqlanadi.</string>
     <string name="permission_mic_rationale">Ovoz bilan boshqarish uchun mikrofon ruxsati zarur. Matn orqali ham foydalanishingiz mumkin.</string>
     <string name="mic_permission_rationale">Ovoz bilan boshqarish uchun mikrofon ruxsati zarur. Matn orqali ham foydalanishingiz mumkin.</string>
+    <string name="web_client_id_fallback" translatable="false">753907752916-ih2sgl5quph35jsuepodusthn74pnh6v.apps.googleusercontent.com</string>
 </resources>

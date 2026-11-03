@@ -83,3 +83,16 @@ echo "Tayyor APK: /sdcard/Download/Astrafolio-Jarvis.apk"
 ```
 
 Shundan so'ng telefonning **Fayl Menejeri (Files) -> Download** bo'limiga kirib, **`Astrafolio-Jarvis.apk`** ustiga bosib ilovani o'rnatishingiz mumkin!
+
+---
+
+## 5-Qadam: Termux Uchun Avtomatik Tuzatishlar (`termux-build-apk.sh` ichida)
+
+1. **`failed to load include path .../platforms/android-36.1/android.jar` xatoligi:**
+   - Android SDK 36.1 ichidagi `android.jar` yangi `FLAG_OFFSET16` (`0x02`) va `0x0206` resource jadval bloklaridan foydalanadi, Termux ichidagi ARM64 `aapt2` esa standart 32-bit `resources.arsc` formatini kutadi.
+   - `./termux-build-apk.sh` skripti `python3` yordamida `platforms/android-36.1/android.jar` ichidagi `resources.arsc` faylini avtomatik ravishda Termux `aapt2` tushunadigan standart 32-bit formatga o'tkazib beradi (barcha `.class` fayllar buzilmasdan saqlanadi).
+2. **`Unresolved reference 'default_web_client_id'` xatoligi:**
+   - `AuthScreen.kt` endi `default_web_client_id` ni kompilatsiya vaqtida qattiq talab qilmaydi va `web_client_id_fallback` hamda **"AQ. API / Lokal Server Rejimida Kirish (Termux)"** tugmasi orqali Google Sign-In siz ham ilovaga kirish imkonini beradi.
+3. **`debug.keystore` avtomatik yaratilishi:**
+   - Agar klon qilingan papkada `debug.keystore` bo'lmasa, `./termux-build-apk.sh` uni `keytool` orqali avtomatik yaratadi.
+
